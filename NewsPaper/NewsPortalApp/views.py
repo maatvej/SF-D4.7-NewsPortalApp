@@ -1,5 +1,4 @@
-# Импортируем класс, который говорит нам о том,
-# что в этом представлении мы будем выводить список объектов из БД
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
@@ -47,7 +46,8 @@ class PostSearch(ListView):
         return context
 
 
-class NewsCreate(CreateView):
+class NewsCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('NewsPortalApp.add_post',)
     # Указываем нашу разработанную форму
     form_class = PostForm
     # модель товаров
@@ -61,7 +61,8 @@ class NewsCreate(CreateView):
         return super().form_valid(form)
 
 
-class ArticleCreate(CreateView):
+class ArticleCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('NewsPortalApp.add_post',)
     # Указываем нашу разработанную форму
     form_class = PostForm
     # модель товаров
@@ -75,13 +76,15 @@ class ArticleCreate(CreateView):
         return super().form_valid(form)
 
 
-class PostUpdate(UpdateView):
+class PostUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ('NewsPortalApp.change_post',)
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
 
 
-class PostDelete(DeleteView):
+class PostDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('NewsPortalApp.delete_post',)
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('post_list')

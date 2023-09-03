@@ -29,10 +29,12 @@ Posts
                </td>
                <td>{{ post.postingDate|date:'M dS Y H:i:s' }}</td>
                <td>{{ post.body|truncatewords:20|censor }}</td>
-               <td><a class="nav-link" href="{{ post.id }}/update">Изменить
-                   </a></td>
-               <td><a class="nav-link" href="{{ post.id }}/delete">Удалить
-                   </a></td>
+               <td>{% if perms.NewsPortalApp.change_post %}
+                   <a class="nav-link" href="{{ post.id }}/update">Изменить
+                   </a>{% endif %}</td>
+               <td>{% if perms.NewsPortalApp.delete_post %}
+                   <a class="nav-link" href="{{ post.id }}/delete">Удалить
+                   </a>{% endif %}</td>
            </tr>
            {% endfor %}
 
